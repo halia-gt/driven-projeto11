@@ -22,6 +22,18 @@ app.post('/tweets', (req, res) => {
     res.send('OK');
 });
 
+app.get('/tweets', (req, res) => {
+    let lastTenTweets;
+
+    if (tweets.length <= 10) {
+        lastTenTweets = tweets;
+    } else {
+        lastTenTweets = tweets.splice(tweets.length - 10);
+    }
+
+    res.send(lastTenTweets);
+});
+
 app.listen(5000, () => {
     console.log('Listening on port 5000');
 });
