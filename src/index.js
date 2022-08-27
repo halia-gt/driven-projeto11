@@ -37,7 +37,7 @@ app.post('/tweets', (req, res) => {
         return;
     }
 
-    tweets.push({
+    tweets.unshift({
         username,
         tweet,
         avatar
@@ -47,14 +47,19 @@ app.post('/tweets', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
-    let lastTenTweets;
-
-    if (tweets.length <= 10) {
-        lastTenTweets = tweets;
-    } else {
-        lastTenTweets = tweets.splice(tweets.length - 10);
+    const { page: pageStr = '1' } = req.query;
+    const page = Number(pageStr);
+    const maxPage = Math.ceil(tweets.length / 10);
+    
+    if (page < 1 || page > maxPage) {
+        res.status(400).send({
+            message: 'Informe uma página válida!'
+        })
+        return;
     }
 
+    const lastTenTweets = [...tweets].splice((page*10 - 10), 10);
+    
     res.send(lastTenTweets);
 });
 
