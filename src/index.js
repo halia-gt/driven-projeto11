@@ -15,6 +15,7 @@ app.post('/sign-up', (req, res) => {
         res.status(400).send({
             message: 'Todos os campos são obrigatórios!'
         });
+        return;
     }
 
     users.push({
@@ -32,6 +33,7 @@ app.post('/tweets', (req, res) => {
         res.status(400).send({
             message: 'Todos os campos são obrigatórios!'
         });
+        return;
     }
 
     tweets.push({
@@ -53,6 +55,20 @@ app.get('/tweets', (req, res) => {
     }
 
     res.send(lastTenTweets);
+});
+
+app.get('/tweets/:username', (req, res) => {
+    const { username } = req.params;
+
+    if (!users.some(user => user.username === username)) {
+        res.status(400).send({
+            message: 'Usuário não encontrado'
+        });
+        return;
+    }
+
+    const userTweets = tweets.filter(tweet => tweet.username === username);
+    res.send(userTweets);
 });
 
 app.listen(5000, () => {
