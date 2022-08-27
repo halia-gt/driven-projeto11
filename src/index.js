@@ -17,16 +17,29 @@ app.post('/sign-up', (req, res) => {
         });
     }
 
-    users.push(req.body);
+    users.push({
+        username,
+        avatar
+    });
     res.status(201).send('OK');
 });
 
 app.post('/tweets', (req, res) => {
     const avatar = users.find(user => user.username === req.body.username).avatar;
+    const { username, tweet } = req.body;
+
+    if (!username || !tweet) {
+        res.status(400).send({
+            message: 'Todos os campos são obrigatórios!'
+        });
+    }
+
     tweets.push({
-        ...req.body,
+        username,
+        tweet,
         avatar
     });
+
     res.status(201).send('OK');
 });
 
