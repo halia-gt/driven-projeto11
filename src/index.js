@@ -26,8 +26,9 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.post('/tweets', (req, res) => {
-    const avatar = users.find(user => user.username === req.body.username).avatar;
-    const { username, tweet } = req.body;
+    const { user: username } = req.headers;
+    const { tweet } = req.body;
+    const avatar = users.find(user => user.username === username).avatar;
 
     if (!username || !tweet) {
         res.status(400).send({
