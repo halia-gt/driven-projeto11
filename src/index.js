@@ -50,14 +50,19 @@ app.get('/tweets', (req, res) => {
     const { page: pageStr = '1' } = req.query;
     const page = Number(pageStr);
     const maxPage = Math.ceil(tweets.length / 10);
+    console.log({
+        query: req.query,
+        page,
+        maxPage
+    });
     
-    if (page < 1 || page > maxPage) {
+    if (page < 1 || (page > maxPage && maxPage !== 0) ) {
         res.status(400).send({
             message: 'Informe uma página válida!'
         })
         return;
     }
-
+    
     const lastTenTweets = [...tweets].splice((page*10 - 10), 10);
     
     res.send(lastTenTweets);
